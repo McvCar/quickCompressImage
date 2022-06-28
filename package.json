@@ -4,7 +4,6 @@
 	"version": "1.0.0",
 	"description": "Compress a picture",
 	"author": "嘉年华",
-	"type": "module",
 	"main": "./src/browser.js",
 	"contributions": {
 		"assets": {

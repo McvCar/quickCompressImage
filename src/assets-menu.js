@@ -2,22 +2,24 @@ let Path = require('path')
 let Fs = require('fs');
 let imageminApi = require('../lib/imagemin.min')
 let packageCfg = require('../package.json')
+let statistical = require('./tools/statistical') 
 // const imageminMozjpeg = require('imagemin-mozjpeg');
 // assets-menu.js
 let AssetsMenu = {
 	onCreateMenu(assetInfo) {
+		statistical.countStartupTimes();
 		return [
-			{
-				label: 'i18n:quick-compress-image.menu.createAsset',
-				click() {
-					if (!assetInfo) {
-						console.log('get create command from header menu');
-					} else {
-						console.log('get create command, the detail of diretory asset is:');
-						console.log(assetInfo);
-					}
-				},
-			},
+			// {
+			// 	label: 'i18n:quick-compress-image.menu.createAsset',
+			// 	click() {
+			// 		if (!assetInfo) {
+			// 			console.log('get create command from header menu');
+			// 		} else {
+			// 			console.log('get create command, the detail of diretory asset is:');
+			// 			console.log(assetInfo);
+			// 		}
+			// 	},
+			// },
 		];
 	},
 
@@ -27,9 +29,9 @@ let AssetsMenu = {
 				label: 'i18n:quick-compress-image.compressPicture',
 				enabled: true,
 				click() {
-					console.log('yes, you clicked');
-					console.log(assetInfo);
-					AssetsMenu.onStartCompressPicture(assetInfo)
+					if(confirm('确定压缩图片?')){
+						AssetsMenu.onStartCompressPicture(assetInfo)
+					}
 				},
 				// submenu: [
 				// 	{
@@ -121,7 +123,8 @@ let AssetsMenu = {
 	 async onCompressPicture(arrList,imageFileList){
 		let rate = await this.getZipRate();
 		let pngRate = rate*0.01;
-		console.log("正在压缩图片...,压缩值:",rate+"%");
+		console.log("---------------------正在压缩图片---------------------------");
+		console.log("压缩值:",rate+"%");
         imageminApi.imagemin(arrList, {
             // destination: resPath,
             plugins: [
