@@ -1,0 +1,46 @@
+{
+	"name": "quick-compress-image",
+	"package_version": 2,
+	"version": "1.0.0",
+	"description": "Compress a picture",
+	"author": "嘉年华",
+	"type": "module",
+	"main": "./src/browser.js",
+	"contributions": {
+		"assets": {
+			"menu": {
+				"methods": "./src/assets-menu.js",
+				"createMenu": "onCreateMenu",
+				"assetMenu": "onAssetMenu",
+				"dbMenu": "onDBMenu",
+				"panelMenu": "onPanelMenu"
+			}
+		},
+		
+		"profile": {
+            "editor": {
+                "zipRate": {
+                    "default": 70,
+                    "label": "压缩值(0-100%)"
+                }
+            }
+        },
+		
+        "preferences": {
+			"label" : "图片压缩",
+            "properties": {
+                "zipRate": {
+                    "ui": "ui-num-input"
+                }
+            }
+        }
+	},
+
+	"scripts": {
+		"build": "babel src -d dist"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+	}
+}
