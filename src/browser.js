@@ -1,9 +1,15 @@
 "use strict";
 
 exports.methods={
+    'setting'(){
+        Editor.Panel.open('quick-compress-image')
+    }
+}
 
-},exports.load=function(){
+exports.load=function(){
 
-},exports.unload=function(){
+}
+
+exports.unload=function(){
 
 };

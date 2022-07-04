@@ -1,30 +1,17 @@
-let Path = require('path')
-let Fs = require('fs');
+let Path 	= require('path')
+let Fs 		= require('fs');
 let imageminApi = require('../lib/imagemin.min')
-let packageCfg = require('../package.json')
+let packageCfg 	= require('../package.json')
 let statistical = require('./tools/statistical') 
-// const imageminMozjpeg = require('imagemin-mozjpeg');
-// assets-menu.js
+
 let AssetsMenu = {
-	onCreateMenu(assetInfo) {
-		statistical.countStartupTimes();
-		return [
-			// {
-			// 	label: 'i18n:quick-compress-image.menu.createAsset',
-			// 	click() {
-			// 		if (!assetInfo) {
-			// 			console.log('get create command from header menu');
-			// 		} else {
-			// 			console.log('get create command, the detail of diretory asset is:');
-			// 			console.log(assetInfo);
-			// 		}
-			// 	},
-			// },
-		];
-	},
 
 	onAssetMenu(assetInfo) {
-		return assetInfo.importer == 'image' ? [
+		if(assetInfo.importer != 'image'){
+			return [];
+		}
+
+		return [
 			{
 				label: 'i18n:quick-compress-image.compressPicture',
 				enabled: true,
@@ -33,23 +20,18 @@ let AssetsMenu = {
 						AssetsMenu.onStartCompressPicture(assetInfo)
 					}
 				},
-				// submenu: [
-				// 	{
-				// 		label: 'i18n:quick-compress-image.menu.assetCommand1',
-				// 		enabled: assetInfo.isDirectory,
-				// 		click() {
-				// 			console.log('get it');
-				// 			console.log(assetInfo);
-				// 		},
-				// 	},
-				// ],
 			},
-		] : [];
+		];
+	},
+
+	onCreateMenu(assetInfo) {
+		statistical.countStartupTimes();
+		return [];
 	},
 
 	isImageFile(filePath){
 		let extname = Path.extname(filePath).toLocaleLowerCase()
-		if(extname == '.png' || extname == '.jpg'){
+		if(extname == '.png' || extname == '.jpg' || extname == '.jpeg'){
 			return true;
 		}
 		return false;
@@ -85,6 +67,7 @@ let AssetsMenu = {
 					})
 				}
 			}
+
 		}else{
 			if(assetInfo.file && this.isImageFile(assetInfo.file)){
 				imageFileList.push({
@@ -93,16 +76,21 @@ let AssetsMenu = {
 				})
 			}
 		}
+		
 		return imageFileList;
 	},
 
 	async onStartCompressPicture(assetInfo){
 		let imageFileList = await this.getImageFileList(assetInfo);
+		if(imageFileList.length == 0){
+			return console.log("不支持该图片格式的压缩")
+		}
 		let arrList = [];
 		for (let i = 0; i < imageFileList.length; i++) {
 			const fileInfo = imageFileList[i];
 			arrList.push(fileInfo.file);
 		}
+
 		this.onCompressPicture(arrList,imageFileList);
 	},
 
@@ -113,36 +101,37 @@ let AssetsMenu = {
 		}else if(rate>100){
 			rate = 100
 		}
+
 		return rate;
 	},
 
 	/**
-	 * 
+	 * 调用压缩工具api
 	 * @param {Array<{file:string,uuid:string}>} fileInfo 
 	 */
 	 async onCompressPicture(arrList,imageFileList){
 		let rate = await this.getZipRate();
 		let pngRate = rate*0.01;
+		
 		console.log("---------------------正在压缩图片---------------------------");
 		console.log("压缩值:",rate+"%");
+
         imageminApi.imagemin(arrList, {
-            // destination: resPath,
             plugins: [
-                imageminApi.imageminMozjpeg({
-                    quality: rate  //压缩质量（0,1）
-                }),
+                imageminApi.imageminMozjpeg({ quality: rate  }), //压缩质量（0,1）
                 imageminApi.imageminPngquant({
                     quality: [pngRate, Math.min(pngRate+0.25,1)]  //压缩质量（0,1）
                 })
             ]
+			
         }).then((arrRes) => {
             console.log("压缩成功,详情:\n")
 			for (let i = 0; i < arrRes.length; i++) {
 				const res = arrRes[i];
 				this.onCompressedSucceed(imageFileList,res)
 			}
-        }
-        ).catch(err => {
+
+        }).catch(err => {
             console.log("压缩失败:",err)
         });
 	},
@@ -153,7 +142,6 @@ let AssetsMenu = {
 	 * @param {Object<{data:Buffer,sourcePath:string}>} res 
 	 */
 	onCompressedSucceed(imageFileList,res){
-
 		let desc = ""
 		for (let i = 0; i < imageFileList.length; i++) {
 			const fileInfo = imageFileList[i];

@@ -6,13 +6,21 @@
 	"author": "嘉年华",
 	"main": "./src/browser.js",
 	"contributions": {
+        "menu": [{
+            "path": "i18n:menu.extension/i18n:quick-compress-image.menu",
+            "label": "i18n:quick-compress-image.setting",
+            "message": "setting"
+        }],
+        "messages": {
+            "setting": {
+                "methods": ["setting"]
+            }
+        },
 		"assets": {
 			"menu": {
 				"methods": "./src/assets-menu.js",
 				"createMenu": "onCreateMenu",
-				"assetMenu": "onAssetMenu",
-				"dbMenu": "onDBMenu",
-				"panelMenu": "onPanelMenu"
+				"assetMenu": "onAssetMenu"
 			}
 		},
 		
@@ -34,10 +42,18 @@
             }
         }
 	},
-
-	"scripts": {
-		"build": "babel src -d dist"
-	},
+	
+    "panels": {
+        "default": {
+            "title": "设置",
+            "type": "dockable",
+            "main": "src/setting-panel",
+            "size": {
+                "width": 260,
+                "height": 230
+            }
+        }
+    },
 	"dependencies": {
 	},
 	"devDependencies": {

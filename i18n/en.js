@@ -4,4 +4,6 @@ module.exports = {
      */
     'name': 'x',
     'compressPicture': 'Compress Picture',
+    'menu': 'Compress Picture',
+    'setting': 'Setting',
 };
