@@ -29,7 +29,11 @@
                 "zipRate": {
                     "default": 70,
                     "label": "压缩值(0-100%)"
-                }
+                },
+				"zipMode":{
+                    "default": 0,
+                    "label": "压缩模式"
+				}
             }
         },
 		
@@ -38,6 +42,19 @@
             "properties": {
                 "zipRate": {
                     "ui": "ui-num-input"
+                },
+                "zipMode": {
+                    "ui": "ui-select",
+					"items": [
+                        {
+                            "value": 0,
+                            "label": "Imagemin"
+                        },
+                        {
+                            "value": 1,
+                            "label": "Tinypng"
+                        }
+					]
                 }
             }
         }
@@ -49,8 +66,8 @@
             "type": "dockable",
             "main": "src/setting-panel",
             "size": {
-                "width": 260,
-                "height": 230
+                "width": 280,
+                "height": 260
             }
         }
     },
