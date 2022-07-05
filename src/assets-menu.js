@@ -3,7 +3,8 @@ let Fs 		= require('fs');
 let imageminApi = require('../lib/imageminApi')
 let tinypngApi 	= require('../lib/tinypngApi')
 let statistical = require('./tools/statistical') 
-let packageCfg 	= require('../package.json')
+let packageCfg 	= require('../package.json');
+const tools = require('./tools/tools');
 
 let AssetsMenu = {
 
@@ -81,6 +82,11 @@ let AssetsMenu = {
 		return imageFileList;
 	},
 
+	async getMode(){
+		let mode = tools.isX64() ? await Editor.Profile.getConfig(packageCfg.name,'zipMode') || 0 : 1;
+		return mode;
+	},
+
 	async onStartCompressPicture(assetInfo){
 		let imageFileList = await this.getImageFileList(assetInfo);
 		if(imageFileList.length == 0){
@@ -92,7 +98,7 @@ let AssetsMenu = {
 			arrList.push(fileInfo.file);
 		}
 
-		let mode = await Editor.Profile.getConfig(packageCfg.name,'zipMode') || 0;
+		let mode = await this.getMode();
 		if(mode == 0){
 			console.log("---------------------压缩模式:Imagemin---------------------------");
 			imageminApi.compressPicture(arrList,imageFileList);

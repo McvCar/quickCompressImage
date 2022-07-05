@@ -62,7 +62,7 @@
 	
     "panels": {
         "default": {
-            "title": "设置",
+            "title": "快闪·压缩图片",
             "type": "dockable",
             "main": "src/setting-panel",
             "size": {

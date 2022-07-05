@@ -3,6 +3,7 @@ let path = require("path");
 let packageCfg = require("../../package.json")
 var http 		= require('http');
 var querystring = require('querystring');
+var os 			= require('os');
 
 const inputType = { "text": 1, "password": 1, "number": 1, "date": 1, "color": 1, "range": 1, "month": 1, "week": 1, "time": 1, "email": 1, "search": 1, "url": 1, "textarea": 1 }
 let checkFsPath = new RegExp("\\.\\./", "g");
@@ -13,6 +14,10 @@ let readFileCount = 0
 let translateMap = {}
 
 module.exports = {
+
+	isX64(){
+		return os.arch() == 'x64'
+	},
 
 	// 不是输入状态是时
 	inputTypeChk(e) {
