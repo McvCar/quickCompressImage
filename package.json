@@ -1,7 +1,7 @@
 {
 	"name": "quick-compress-image",
 	"package_version": 2,
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Compress a picture",
 	"author": "嘉年华",
 	"main": "./src/browser.js",
